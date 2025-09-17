@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>How to Cheat at Benchmarking Search Engines</title>
+
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/dracula.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section>
+				<h2>HOW TO CHEAT</h2>
+				<img src="img/main.png" height="450px" style="margin: 0px;">
+				<h3>AT BENCHMARKING SEARCH ENGINES </h3>
+
+				<small>Vector Space Day 2025 | Berlin | Roman Grebennikov</small>
+			</section>
+
+			<section>
+				<h2>whoami</h2>
+				<p><img src="img/ava.jpg" height="300px" style="margin: 0px;"></p>
+				<ul>
+					<li>PhD in CS, quant trading, credit scoring</li>
+					<li><strong>Findify</strong>: e-commerce search, personalization</li>
+					<li><strong>Delivery Hero</strong>: food search, LLMs</li>
+					<li><strong>Opensource</strong>: Metarank, LightGBM4j, Nixiesearch</li>
+				</ul>
+			</section>
+			<section>
+				<img src="img/dh.webp">
+			</section>
+			<section>
+				<h2>Vector search at DH</h2>
+				<ul>
+					<li>Started at 2024: off-the-shelf embeddings were bad</li>
+					<li>Fine-tuned embeddings: <a href="https://mices.co/mices2024/index.html">biggest a/b test
+							uplift [MICES'24]</a>
+					</li>
+					<li>V1: Embedded Lucene with immutable index</li>
+				</ul>
+				<img src="img/fine.png" height="300px">
+			</section>
+			<section>
+				<h2>Lucene as a vector search engine?</h2>
+				<img src="img/dh-lucene.png" height="300px">
+				<ul>
+					<li><strong>pros</strong>: tool 3 days to implement, no extra costs</li>
+					<li><strong>cons</strong>: pod startup, bigger embeddings, latency spikes</li>
+				</ul>
+				<p><strong>Tech debt</strong>: should be moved to a proper search engine eventually</p>
+			</section>
+			<section>
+				<h2></h2>
+			</section>
+			<section>
+				<h2>Benchmarks</h2>
+				<img src="img/bench.png">
+			</section>
+		</div>
+	</div>
+
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			hash: true,
+			history: true,
+			controls: true,
+			progress: true,
+			width: 1200,
+			transition: 'none',
+			slideNumber: true,
+
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+		});
+	</script>
+</body>
+
+</html>
