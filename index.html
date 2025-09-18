@@ -60,11 +60,34 @@
 				<p><strong>Tech debt</strong>: should be moved to a proper search engine eventually</p>
 			</section>
 			<section>
-				<h2></h2>
+				<h2>Which search engine?</h2>
+				<ul>
+					<li><strong>Data</strong>: 2-3M docs, 368-2560 dimension</li>
+					<li><strong>High selectivity filtering</strong>: by availability</li>
+					<li><strong>Low selectivity filtering</strong>: by geolocation</li>
+				</ul>
+				<p>Candidates: <br>ES, OS, Qdrant, Weaviate, Redis, Mongo Atlas, pgvector, ...</p>
 			</section>
 			<section>
-				<h2>Benchmarks</h2>
+				<h2>Rabbit hole of vendor benchmarks</h2>
 				<img src="img/bench.png">
+				<ul>
+					<li>Vendor's database is always faster - why?</li>
+					<li>Different versions, hardware, datasets and parameters</li>
+				</ul>
+			</section>
+			<section>
+				<h2>ANN benchmark</h2>
+				<img src="img/annbench.png">
+			</section>
+			<section>
+				<h2>Nixiesearch</h2>
+				<p>A stateless search search engine</p>
+				<ul>
+					<li>Runs over S3 block storage</li>
+					<li>Lucene: same engine as Elastic/Opensearch/SOLR</li>
+				</ul>
+				<img src="img/separate-indexer.png" height="200px">
 			</section>
 		</div>
 	</div>
