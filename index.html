@@ -69,6 +69,26 @@
 				<p>Candidates: <br>ES, OS, Qdrant, Weaviate, Redis, Mongo Atlas, pgvector, ...</p>
 			</section>
 			<section>
+				<h2>Measuring performance</h2>
+				<img src="img/recall-curve.png" height="450px" style="margin: 0px;">
+			</section>
+			<section>
+				<h2>Performance is a spectrum</h2>
+				<ul>
+					<li>Configuration space: efConst, efSearch, m, ...</li>
+					<li>No single best configuration: "it depends"</li>
+					<li>Depends on data, queries, parameters, hardware</li>
+				</ul>
+			</section>
+			<section>
+				<h2>ANN benchmark</h2>
+				<img src="img/annbench.png" height="400px" style="margin: 0px;">
+				<ul>
+					<li><strong>pros</strong>: many engines, reproducible</li>
+					<li><strong>cons</strong>: no filtering/quantization, old engine versions</li>
+				</ul>
+			</section>
+			<section>
 				<h2>Rabbit hole of vendor benchmarks</h2>
 				<img src="img/bench.png">
 				<ul>
@@ -77,17 +97,30 @@
 				</ul>
 			</section>
 			<section>
-				<h2>ANN benchmark</h2>
-				<img src="img/annbench.png">
-			</section>
-			<section>
-				<h2>Nixiesearch</h2>
+				<h2>Shameless plug: Nixiesearch</h2>
 				<p>A stateless search search engine</p>
 				<ul>
 					<li>Runs over S3 block storage</li>
 					<li>Lucene: same engine as Elastic/Opensearch/SOLR</li>
 				</ul>
-				<img src="img/separate-indexer.png" height="200px">
+				<p><img src="img/separate-indexer.png" height="200px" style="margin: 0px;"></p>
+				<a href="https://github.com/nixiesearch/nixiesearch">https://github.com/nixiesearch/nixiesearch</a>
+			</section>
+			<section>
+				<img src="img/yet-another-bench.jpg" height="700px">
+			</section>
+			<section>
+				<h2>1: Engine-specific parameters</h2>
+				<p>Example: Qdrant <i>default_segment_number</i></p>
+				<ul>
+					<li>Qdrant: same ef_search per segment</li>
+					<li>Lucene: ef_search shared across segments</li>
+				</ul>
+				<img src="img/segments.png" height="300px" style="margin: 0px;">
+				<p>TLDR: parameters should be part of search space</p>
+			</section>
+			<section>
+				<h2></h2>
 			</section>
 		</div>
 	</div>
