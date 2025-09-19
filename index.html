@@ -69,26 +69,6 @@
 				<p>Candidates: <br>ES, OS, Qdrant, Weaviate, Redis, Mongo Atlas, pgvector, ...</p>
 			</section>
 			<section>
-				<h2>Measuring performance</h2>
-				<img src="img/recall-curve.png" height="450px" style="margin: 0px;">
-			</section>
-			<section>
-				<h2>Performance is a spectrum</h2>
-				<ul>
-					<li>Configuration space: efConst, efSearch, m, ...</li>
-					<li>No single best configuration: "it depends"</li>
-					<li>Depends on data, queries, parameters, hardware</li>
-				</ul>
-			</section>
-			<section>
-				<h2>ANN benchmark</h2>
-				<img src="img/annbench.png" height="400px" style="margin: 0px;">
-				<ul>
-					<li><strong>pros</strong>: many engines, reproducible</li>
-					<li><strong>cons</strong>: no filtering/quantization, old engine versions</li>
-				</ul>
-			</section>
-			<section>
 				<h2>Rabbit hole of vendor benchmarks</h2>
 				<img src="img/bench.png">
 				<ul>
@@ -107,20 +87,243 @@
 				<a href="https://github.com/nixiesearch/nixiesearch">https://github.com/nixiesearch/nixiesearch</a>
 			</section>
 			<section>
+				<h2>Strawman's benchmark #1</h2>
+				<p>Take all default parameters and measure <strike>something</strike> latency?</p>
+				<img src="img/noidea.png">
+			</section>
+			<section>
 				<img src="img/yet-another-bench.jpg" height="700px">
 			</section>
 			<section>
-				<h2>1: Engine-specific parameters</h2>
-				<p>Example: Qdrant <i>default_segment_number</i></p>
+				<h2>Performance is a spectrum</h2>
+				<ul>
+					<li>Configuration space: efConst, efSearch, m, ...</li>
+					<li>No single best configuration: "it depends"</li>
+					<li>Depends on data, queries, parameters, hardware</li>
+				</ul>
+			</section>
+			<section>
+				<h2>Strawman's benchmark #2</h2>
+				<p>OK let's fix all params and measure latency/recall</p>
+				<img src="img/vdbbench.png" height="400px">
+			</section>
+			<section>
+				<h2>Measuring performance</h2>
+				<img src="img/recall-curve.png" height="450px" style="margin: 0px;">
+				<p><strong>TLDR</strong>: fix all params but one, draw precision/recall</p>
+			</section>
+			<section>
+				<h2>What if we don't fix params?</h2>
+				<pre><code>
+m: [16, 32, 48, 64]
+ef_construction: [128, 256, 512]
+ef_search: [32, 64, 128]					
+				</code></pre>
+				<img src="img/recall-curve-many.png" height="400px" style="margin: 0px;">
+			</section>
+			<section>
+				<h2>What if we don't fix params?</h2>
+				<pre><code>
+m: [16, 32, 48, 64]
+ef_construction: [128, 256, 512]
+ef_search: [32, 64, 128]					
+				</code></pre>
+				<img src="img/recall-curve-many2.png" height="400px" style="margin: 0px;">
+			</section>
+
+			<section>
+				<h2>ANN benchmark</h2>
+				<img src="img/annbench.png" height="400px" style="margin: 0px;">
+				<ul>
+					<li><strong>pros</strong>: many engines, reproducible</li>
+					<li><strong>cons</strong>: no filtering/quantization, old engine versions</li>
+					<li><strong>cons</strong>: no engine specific params</li>
+				</ul>
+			</section>
+			<section>
+				<h2>Engine-specific parameters</h2>
+				<p>Example 1: Qdrant <i>default_segment_number</i></p>
 				<ul>
 					<li>Qdrant: same ef_search per segment</li>
 					<li>Lucene: ef_search shared across segments</li>
 				</ul>
-				<img src="img/segments.png" height="300px" style="margin: 0px;">
+				<img src="img/segments.png" height="300px" style="margin-bottom: 0px;">
 				<p>TLDR: parameters should be part of search space</p>
 			</section>
 			<section>
-				<h2></h2>
+				<h2>Engine-specific parameters</h2>
+				<p>Example 2: Opensearch faiss/lucene search</p>
+				<p>IMG TODO</p>
+				<p>TLDR: parameters should be part of search space</p>
+			</section>
+			<section>
+				<img src="img/xkcd-bench.png">
+				<blockquote>> that covers everyone's use cases</blockquote>
+			</section>
+			<section>
+				<h2>My personal use case</h2>
+				<ul>
+					<li><strong>Filtering</strong>: low/high selectivity</li>
+					<li><strong>Data</strong>: Bring-Your-Own-Data</li>
+					<li><strong>Quantization</strong>: not only qps-recall, but also costs</li>
+					<li><strong>Configuration</strong>: engine-specific, latest versions</li>
+				</ul>
+				<p>Nice to have: lexical search, leaderboard</p>
+			</section>
+			<section>
+				<h3>HSEB: Hybrid Search Engine Benchmark</h3>
+				<p><img src="img/hseb.png" height="500px" style="margin: 0px;"></p>
+				<a href="https://github.com/hseb-benchmark/hseb">https://github.com/hseb-benchmark/hseb</a>
+			</section>
+			<section>
+				<h2>HSEB: data</h2>
+				<ul>
+					<li>Eats anything TREC-JSON</li>
+					<li>Supports SBERT embeddings</li>
+					<li>FAISS-based exact search with filters!</li>
+				</ul>
+				<pre><code data-trim data-noescape>
+// queries.json
+{"_id": 1, "text": "hello, world"}
+// corpus.json
+{"_id": 1, "text": "greetings"}
+				</code></pre>
+				<pre><code data-trim data-noescape class="language-shell">
+$> pip install hseb
+
+$> python -m hseb.preprocess --queries my_queries.json \
+  --corpus my_corpus.json --model your-preferred-model \
+  --out my_dataset/
+				</code></pre>
+			</section>
+			<section>
+				<h2>Reference dataset: MSMARCO</h2>
+				<a
+					href="https://huggingface.co/datasets/hseb-benchmark/msmarco">https://huggingface.co/datasets/hseb-benchmark/msmarco</a>
+				<img src="img/hseb-msmarco.png" height=500px">
+			</section>
+			<section>
+				<h2>Dataset params</h2>
+				<ul>
+					<li>Documents: 1K/100K/1M doc sample, 10K queries</li>
+					<li>Dims: 384 [minilm], 768 [e5-base], 2560 [qwen3]</li>
+					<li>Filters: none, 10% sampling, 90% sampling</li>
+				</ul>
+				<pre><code data-trim data-noescape>
+// document
+{
+  "id": 123,
+  "text": "Document content...",
+  "embedding": [0.1, 0.2, ...],
+  "tag": [10, 90, 100]
+}					
+				</code></pre>
+			</section>
+			<section>
+				<h2>Exact search</h2>
+				<ul>
+					<li>top-100 docs and scores</li>
+					<li>focus on dot-product (and not cosine!)</li>
+				</ul>
+				<pre><code data-trim data-noescape>
+{
+  "id": 456,
+  "text": "Query text...",
+  "embedding": [0.3, 0.4, ...],
+  "results_10_docs": [123, 789, ...],
+  "results_10_scores": [0.95, 0.87, ...],
+  "results_90_docs": [123, 456, ...],
+  "results_90_scores": [0.95, 0.89, ...],
+  "results_100_docs": [123, 456, ...],
+  "results_100_scores": [0.95, 0.89, ...]
+}
+				</code></pre>
+			</section>
+			<section>
+				<h2>Search engines supported</h2>
+				<pre><code>
+class EngineBase(ABC):
+    def start(self, index_args: IndexArgs) -> None: ...
+
+    def stop(self, cleanup: bool) -> None: ...
+
+    def commit(self) -> None: ...
+
+    def index_is_green(self) -> bool: ...
+
+    def index_batch(self, batch: list[Doc]) -> IndexResponse: ...
+
+    def search(self, search_args: SearchArgs, query: Query, top_k: int) -> SearchResponse: ...					
+				</code></pre>
+				<p><strong>Clients</strong>: ES, OS, Redis, Qdrant, Weaviate, Nixiesearch, pgvector</p>
+				<p><strong>TODO</strong>: vespa, FAISS, chroma</p>
+			</section>
+			<section>
+				<h2>Benchmark manifest</h2>
+				<pre><code data-trim data-noescape style="max-height: 800px;">
+engine: hseb.engine.elastic.ElasticsearchEngine
+image: elasticsearch:9.1.3
+dataset: 
+  dim: 384
+  name: hseb-benchmark/msmarco
+  query: "query-all-MiniLM-L6-v2-1M"
+  corpus: "corpus-all-MiniLM-L6-v2-1M"
+batch_size: 1024
+experiments:
+- tag: float
+  k: 100
+  index:
+    m: [8, 16, 32, 64, 128]
+    ef_construction: [32, 64, 128, 256, 512]
+    quant: ["float32"]
+    kwargs:
+      heap_size: ["8g"]
+  search:
+    ef_search: [32, 64, 96, 128, 192, 256]
+    filter_selectivity: [10, 90, 100]					
+				</code></pre>
+			</section>
+			<section>
+				<h2>REPRODUCE!</h2>
+				<img src="img/run.png" height="300px" style="margin: 0px;">
+				<ul>
+					<li>Hardware: AWS c8i.2xlarge, 32GB RAM, 8 vCPU</li>
+					<li>Parameters: always committed to git</li>
+				</ul>
+				<pre><code data-noescape data-trim class="language-shell">
+$> pip install hseb
+$> python -m hseb --config configs/elastic/small.yml
+   // and wait for 20 hours
+				</code></pre>
+			</section>
+			<section>
+				<h2>Results</h2>
+				TODO
+			</section>
+			<section>
+				<h2>Filtering: 10% match</h2>
+				TODO
+			</section>
+			<section>
+				<h2>Filtering: 90% match</h2>
+				TODO
+			</section>
+			<section>
+				<h2>Quantization</h2>
+				<p>disclaimer: not all engines support fp16/int8/int1</p>
+				TODO
+			</section>
+			<section>
+				<h2>leaderboard</h2>
+				TODO
+			</section>
+			<section>
+				<h2>Conclusions</h2>
+				TODO
+			</section>
+			<section>
+				<h2>Links</h2>
+				TODO
 			</section>
 		</div>
 	</div>
